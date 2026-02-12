@@ -3,3 +3,4 @@ dist
 ccusage
 codex
 .DS_Store
+*.tgz

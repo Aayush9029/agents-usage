@@ -59,6 +59,18 @@ agents-usage --sources codex --month 2026-02 --metric tokens --offline --non-int
 - By default, it uses the current month and `cost` metric.
 - If pricing cannot be loaded, unknown model pricing is treated as `$0.00` and flagged.
 
+## CI/CD
+
+GitHub Actions is configured to:
+
+- Run build + packaging smoke tests on every push and pull request.
+- Auto-publish to npm on pushes to `main`.
+- Skip publishing if that exact package version already exists on npm.
+
+Required repo secret:
+
+- `NPM_TOKEN`: npm automation token with publish access.
+
 ## Author
 
 - Aayush Pokharel: <https://github.com/Aayush9029>
