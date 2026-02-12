@@ -64,12 +64,13 @@ agents-usage --sources codex --month 2026-02 --metric tokens --offline --non-int
 GitHub Actions is configured to:
 
 - Run build + packaging smoke tests on every push and pull request.
-- Auto-publish to npm on pushes to `main`.
+- Auto-publish to npm on pushes to `main` via npm Trusted Publishing (OIDC).
 - Skip publishing if that exact package version already exists on npm.
 
-Required repo secret:
+Notes:
 
-- `NPM_TOKEN`: npm automation token with publish access.
+- Do not set `NPM_TOKEN` for publishing when using Trusted Publishing.
+- In npm package settings, add this repo/workflow as a Trusted Publisher.
 
 ## Author
 
