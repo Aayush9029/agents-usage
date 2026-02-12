@@ -54,24 +54,6 @@ agents-usage --sources claude,codex --month 2026-02 --metric cost --non-interact
 agents-usage --sources codex --month 2026-02 --metric tokens --offline --non-interactive
 ```
 
-## Notes
-
-- By default, it uses the current month and `cost` metric.
-- If pricing cannot be loaded, unknown model pricing is treated as `$0.00` and flagged.
-
-## CI/CD
-
-GitHub Actions is configured to:
-
-- Run build + packaging smoke tests on every push and pull request.
-- Auto-publish to npm on pushes to `main` via npm Trusted Publishing (OIDC).
-- Skip publishing if that exact package version already exists on npm.
-
-Notes:
-
-- Do not set `NPM_TOKEN` for publishing when using Trusted Publishing.
-- In npm package settings, add this repo/workflow as a Trusted Publisher.
-
 ## Author
 
 - Aayush Pokharel: <https://github.com/Aayush9029>

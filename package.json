@@ -1,20 +1,24 @@
 {
   "name": "agents-usage",
   "version": "0.1.0",
-  "private": false,
-  "description": "Lightweight CLI usage charts for Claude and Codex",
-  "license": "MIT",
-  "homepage": "https://github.com/Aayush9029/agents-usage#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Aayush9029/agents-usage.git"
   },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.2"
+  },
+  "bin": {
+    "agents-usage": "dist/index.js"
+  },
   "bugs": {
     "url": "https://github.com/Aayush9029/agents-usage/issues"
   },
-  "type": "module",
-  "bin": {
-    "agents-usage": "dist/index.js"
+  "description": "Lightweight CLI usage charts for Claude and Codex",
+  "engines": {
+    "node": ">=18"
   },
   "files": [
     "dist",
@@ -22,6 +26,17 @@
     "README.md",
     "LICENSE"
   ],
+  "homepage": "https://github.com/Aayush9029/agents-usage#readme",
+  "keywords": [
+    "cli",
+    "codex",
+    "claude",
+    "usage",
+    "analytics",
+    "terminal"
+  ],
+  "license": "MIT",
+  "private": false,
   "publishConfig": {
     "access": "public"
   },
@@ -31,20 +46,5 @@
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js"
   },
-  "keywords": [
-    "cli",
-    "codex",
-    "claude",
-    "usage",
-    "analytics",
-    "terminal"
-  ],
-  "engines": {
-    "node": ">=18"
-  },
-  "devDependencies": {
-    "@types/node": "^22.13.10",
-    "tsx": "^4.20.3",
-    "typescript": "^5.8.2"
-  }
+  "type": "module"
 }
