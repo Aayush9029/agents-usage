@@ -25,11 +25,6 @@ const SOURCE_STYLES: Record<
 		fill: '97',
 		empty: '90',
 	},
-	opencode: {
-		title: '34', // blue
-		fill: '34',
-		empty: '90',
-	},
 };
 
 const COMBINED_STYLE = {

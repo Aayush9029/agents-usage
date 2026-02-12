@@ -1,4 +1,4 @@
-import type { SourceKind, UsageEntry } from './types.js';
+import type { UsageEntry } from './types.js';
 import { getHomeDirectory, readJsonFile, writeJsonFile } from './utils.js';
 import path from 'node:path';
 
@@ -138,11 +138,6 @@ function modelVariants(model: string): string[] {
 		}
 	}
 	return [...variants];
-}
-
-export async function loadPricingMap(offline: boolean): Promise<PricingMap> {
-	const status = await loadPricingStatus(offline);
-	return status.pricingMap;
 }
 
 export async function loadPricingStatus(offline: boolean): Promise<PricingStatus> {
@@ -353,11 +348,3 @@ export type PricingStatus = {
 	isEmpty: boolean;
 	source: PricingSource;
 };
-
-export function hasKnownCost(entry: UsageEntry): boolean {
-	return entry.costUSD != null && Number.isFinite(entry.costUSD);
-}
-
-export function sourceSupportsServerPricing(source: SourceKind): boolean {
-	return source === 'codex' || source === 'opencode' || source === 'claude';
-}

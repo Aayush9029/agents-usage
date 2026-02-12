@@ -4,7 +4,6 @@ import {
 	isDirectory,
 	listFilesRecursively,
 	normalizeNumber,
-	readJsonFile,
 	readJsonlLines,
 	SOURCE_LABELS,
 	splitCommaList,
@@ -37,14 +36,6 @@ function getCodexRoot(): string {
 		return path.resolve(env);
 	}
 	return path.join(getHomeDirectory(), '.codex');
-}
-
-function getOpenCodeRoot(): string {
-	const env = process.env.OPENCODE_DATA_DIR?.trim();
-	if (env != null && env !== '') {
-		return path.resolve(env);
-	}
-	return path.join(getHomeDirectory(), '.local', 'share', 'opencode');
 }
 
 async function detectClaudeSource(): Promise<SourceDetection> {
@@ -82,26 +73,12 @@ async function detectCodexSource(): Promise<SourceDetection> {
 	};
 }
 
-async function detectOpenCodeSource(): Promise<SourceDetection> {
-	const root = getOpenCodeRoot();
-	const messagesDir = path.join(root, 'storage', 'message');
-	const files = await listFilesRecursively(messagesDir, '.json', 5);
-	return {
-		source: 'opencode',
-		label: SOURCE_LABELS.opencode,
-		available: files.length > 0,
-		roots: [root],
-		fileCount: files.length,
-	};
-}
-
 export async function detectSources(): Promise<SourceDetection[]> {
-	const [claude, codex, opencode] = await Promise.all([
+	const [claude, codex] = await Promise.all([
 		detectClaudeSource(),
 		detectCodexSource(),
-		detectOpenCodeSource(),
 	]);
-	return [claude, codex, opencode];
+	return [claude, codex];
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
@@ -356,77 +333,11 @@ async function loadCodexEntries(): Promise<UsageEntry[]> {
 	return entries;
 }
 
-async function loadOpenCodeEntries(): Promise<UsageEntry[]> {
-	const root = getOpenCodeRoot();
-	const messagesDir = path.join(root, 'storage', 'message');
-	const files = await listFilesRecursively(messagesDir, '.json');
-	const entries: UsageEntry[] = [];
-	const dedupe = new Set<string>();
-
-	for (const filePath of files) {
-		const payload = await readJsonFile<unknown>(filePath);
-		const record = asRecord(payload);
-		if (record == null) {
-			continue;
-		}
-
-		const id = asTrimmedString(record.id);
-		if (id != null) {
-			if (dedupe.has(id)) {
-				continue;
-			}
-			dedupe.add(id);
-		}
-
-		const tokens = asRecord(record.tokens);
-		const cache = asRecord(tokens?.cache);
-		const inputTokens = normalizeNumber(tokens?.input);
-		const outputTokens = normalizeNumber(tokens?.output);
-		const reasoningOutputTokens = normalizeNumber(tokens?.reasoning);
-		const cacheReadTokens = normalizeNumber(cache?.read);
-		const cacheWriteTokens = normalizeNumber(cache?.write);
-		if (inputTokens + outputTokens + cacheReadTokens + cacheWriteTokens + reasoningOutputTokens === 0) {
-			continue;
-		}
-
-		const time = asRecord(record.time);
-		const createdMs = normalizeNumber(time?.created);
-		const completedMs = normalizeNumber(time?.completed);
-		const epochMs = createdMs > 0 ? createdMs : completedMs > 0 ? completedMs : Date.now();
-		const date = new Date(epochMs);
-		if (Number.isNaN(date.getTime())) {
-			continue;
-		}
-
-		const model = asTrimmedString(record.modelID) ?? 'unknown';
-		const provider = asTrimmedString(record.providerID);
-		const rawCost = record.cost;
-		const costUSD = typeof rawCost === 'number' && Number.isFinite(rawCost) ? rawCost : null;
-
-		entries.push({
-			source: 'opencode',
-			timestamp: date,
-			model,
-			...(provider != null ? { provider } : {}),
-			inputTokens,
-			outputTokens,
-			cacheReadTokens,
-			cacheWriteTokens,
-			reasoningOutputTokens,
-			costUSD,
-		});
-	}
-
-	return entries;
-}
-
 export async function loadEntriesForSource(source: SourceKind): Promise<UsageEntry[]> {
 	switch (source) {
 		case 'claude':
 			return loadClaudeEntries();
 		case 'codex':
 			return loadCodexEntries();
-		case 'opencode':
-			return loadOpenCodeEntries();
 	}
 }

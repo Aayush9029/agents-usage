@@ -52,10 +52,10 @@ export async function runApp(argv: string[]): Promise<void> {
 
 	const colorsEnabled = ansiEnabled(options.noColor);
 	const detections = await withSpinner('Detecting available sources...', colorsEnabled, detectSources);
-	const available = detections.filter((item) => item.available && item.source !== 'opencode');
+	const available = detections.filter((item) => item.available);
 
 	if (available.length === 0) {
-		printDetections(detections.filter((item) => item.source !== 'opencode'), colorsEnabled);
+		printDetections(detections, colorsEnabled);
 		console.error('\nNo usage data files were found for Claude/Codex sources.');
 		process.exitCode = 1;
 		return;

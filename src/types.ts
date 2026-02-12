@@ -1,4 +1,4 @@
-export type SourceKind = 'claude' | 'codex' | 'opencode';
+export type SourceKind = 'claude' | 'codex';
 export type MetricKind = 'cost' | 'tokens';
 
 export type UsageEntry = {

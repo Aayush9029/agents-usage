@@ -1,4 +1,4 @@
-import type { DayBucket, MetricKind, UsageEntry } from './types.js';
+import type { DayBucket, UsageEntry } from './types.js';
 import { mkdir, readdir, readFile, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -6,7 +6,6 @@ import path from 'node:path';
 export const SOURCE_LABELS = {
 	claude: 'Claude',
 	codex: 'Codex',
-	opencode: 'OpenCode',
 } as const;
 
 export type MonthWindow = {
@@ -158,10 +157,6 @@ export function formatCurrency(value: number): string {
 
 export function formatNumber(value: number): string {
 	return new Intl.NumberFormat('en-US').format(Math.round(value));
-}
-
-export function formatMetric(metric: MetricKind, value: number): string {
-	return metric === 'cost' ? formatCurrency(value) : formatNumber(value);
 }
 
 export function totalTokens(entry: UsageEntry): number {
