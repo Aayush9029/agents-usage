@@ -1,0 +1,50 @@
+{
+  "name": "agents-usage",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Lightweight CLI usage charts for Claude and Codex",
+  "license": "MIT",
+  "homepage": "https://github.com/Aayush9029/agents-usage#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aayush9029/agents-usage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Aayush9029/agents-usage/issues"
+  },
+  "type": "module",
+  "bin": {
+    "agents-usage": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "cli",
+    "codex",
+    "claude",
+    "usage",
+    "analytics",
+    "terminal"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.2"
+  }
+}
